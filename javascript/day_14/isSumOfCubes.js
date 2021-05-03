@@ -1,9 +1,20 @@
- function isSumOfCubes(s){
-    // ...
-    function checkCubic(arr) {
-        const a = [...arr]
-        return +a.join('') ==  arr.map((num) => num ** 3).reduce((a, b) => +a + +b)
+function checkCubic(str) {
+    
+    // check if number is Cubic
+    function checkCubic(str) {
+        return str ==  str.split('').map((num) => num ** 3).reduce((a, b) => +a + +b)
     }
+    
+    // chunk array of numbers into group of 3s 
+    function chunk (arr) {
+        const b = [...arr]
+        let chonked = []
+        while(b.length > 0) {
+            chonked.push(b.splice(0, 3).join(''))
+        }
+        return chonked
+    }
+    // separate numbers from string and group in2 an array
     const separate = (str) => {
         let num = []
         for (let i = 0; i < str.length; i ++) {
@@ -18,26 +29,33 @@
                 num.push(n)
             }
         }
+        num = num.filter((m) => Array.isArray(m))
         console.log(num)
-        num = num.filter((m) => m === '.' || Array.isArray(m))
-        if (num.includes('.') ) {
-            const index = num.findIndex((dot) => dot === '.')
-            if (num[index + 1] !== '.' ) {
-                num.splice(num.indexOf('.') - 1, num.indexOf('.') + 1)
-            }
-            
-        }
-        return num.filter(m => m.length <= 3)
+        return num
     }
-    let digits = separate(s).filter((d) => Array.isArray(d))
-    console.log(digits)
-    let newDigits = []
-    digits.forEach((d) => {
-        if (checkCubic(d)) {
-            const ds = d.join('')
-            newDigits.push(ds)
+    let res = []
+    //loop through separated function return values and divide an array with length greater than 3 into chunks
+    separate(str).forEach((m) => {
+        if (m.length > 3) {
+            res.push(chunk(m))
+        } else {
+            res.push(chunk(m))
         }
     })
+    let result = []
+    // turn array of arrays into a single array
+    res.forEach((r) => {
+        result = result.concat(r)
+    })
+
+    let newDigits = []
+    // check each number in the array is sum of cubes
+    result.forEach((d) => {
+        if (checkCubic(d)) {
+            newDigits.push(d)
+        }
+    })
+    // arrange the array to return the specified result as string
     if(newDigits.length > 0) {
         const add = newDigits.reduce((a, b) => +a + +b)
         newDigits.push(add)
@@ -47,4 +65,3 @@
     }
     return newDigits.join(' ')
 }
-
